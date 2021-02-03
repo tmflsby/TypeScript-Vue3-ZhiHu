@@ -1,7 +1,7 @@
 interface Person {
-    readonly id: number
+    readonly id: number  // 只读属性
     name: string
-    age?: number
+    age?: number         // 可选属性
 }
 
 let curry: Person = {
@@ -9,4 +9,3 @@ let curry: Person = {
     name: 'Curry',
     age: 20
 }
-
