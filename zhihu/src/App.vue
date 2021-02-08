@@ -1,82 +1,34 @@
 <template>
   <div class="container">
     <GlobalHeader :user="currentUser"/>
-    <ColumnList :list="list"/>
-    <ValidateForm @form-submit="onFormSubmit">
-      <ValidateInput
-        type="email"
-        placeholder="请输入邮箱地址"
-        :rules="emailRules"
-        v-model="emailVal"
-        ref="inputRef"
-      />
-      <template #submit>
-        <span class="btn btn-danger">Submit</span>
-      </template>
-    </ValidateForm>
+    <router-view/>
+    <footer class="text-center py-4 text-secondary bg-light mt-6">
+      <div>
+        <ul class="list-inline mb-0">
+          <li class="list-inline-item">© 2021 知乎专栏</li>
+          <li class="list-inline-item">课程</li>
+          <li class="list-inline-item">文档</li>
+          <li class="list-inline-item">联系</li>
+          <li class="list-inline-item">更多</li>
+        </ul>
+      </div>
+    </footer>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
-import ColumnList, { ColumnProps } from '@/components/ColumnList.vue'
+import { defineComponent } from 'vue'
 import GlobalHeader, { UserProps } from '@/components/GlobalHeader.vue'
-import ValidateInput, { RulesProp } from '@/components/ValidateInput.vue'
-import ValidateForm from '@/components/ValidateForm.vue'
-const columnData: ColumnProps[] = [
-  {
-    id: 1,
-    title: 'test1专栏',
-    description: '12312132131232132133333333',
-    avatar: 'https://avatars.githubusercontent.com/u/48079487?s=60&v=4'
-  },
-  {
-    id: 2,
-    title: 'test2专栏',
-    description: '12312132131232132133333333'
-  },
-  {
-    id: 2,
-    title: 'test2专栏',
-    description: '12312132131232132133333333',
-    avatar: 'https://avatars.githubusercontent.com/u/48079487?s=60&v=4'
-  },
-  {
-    id: 2,
-    title: 'test2专栏',
-    description: '12312132131232132133333333'
-  },
-  {
-    id: 2,
-    title: 'test2专栏',
-    description: '12312132131232132133333333',
-    avatar: 'https://avatars.githubusercontent.com/u/48079487?s=60&v=4'
-  }
-]
 const currentUser: UserProps = {
-  isLogin: true,
+  isLogin: false,
   name: 'curry'
 }
 export default defineComponent({
   name: 'App',
-  components: { ColumnList, GlobalHeader, ValidateInput, ValidateForm },
+  components: { GlobalHeader },
   setup () {
-    const inputRef = ref<any>()
-    const emailVal = ref('Curry')
-    const emailRules: RulesProp = [
-      { type: 'required', message: '电子邮箱地址不能为空' },
-      { type: 'email', message: '请输入正确的电子邮箱格式' }
-    ]
-    const onFormSubmit = (result: boolean) => {
-      console.log('result', result)
-    }
     return {
-      list: columnData,
-      currentUser,
-      emailRules,
-      emailVal,
-      onFormSubmit,
-      inputRef
+      currentUser
     }
   }
 })

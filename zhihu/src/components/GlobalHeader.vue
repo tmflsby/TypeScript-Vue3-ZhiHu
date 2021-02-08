@@ -1,12 +1,12 @@
 <template>
   <nav class="navbar navbar-dark bg-primary justify-content-between mb-4 px-4">
-    <a class="navbar-brand" href="/">知乎专栏</a>
+    <router-link class="navbar-brand" to="/">知乎专栏</router-link>
     <ul class="list-inline mb-0" v-if="!user.isLogin">
       <li class="list-inline-item">
-        <a class="btn btn-outline-light my-2" href="/">登录</a>
+        <router-link class="btn btn-outline-light my-2" to="/login">登录</router-link>
       </li>
       <li class="list-inline-item">
-        <a class="btn btn-outline-light my-2" href="/">注册</a>
+        <router-link class="btn btn-outline-light my-2" to="/login">注册</router-link>
       </li>
     </ul>
     <ul class="list-inline mb-0" v-else>
