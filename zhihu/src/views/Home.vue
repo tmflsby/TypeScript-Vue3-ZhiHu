@@ -6,7 +6,7 @@
           <img class="w-50" src="../assets/callout.svg" alt="callout">
           <h2 class="fw-light">随心写作，自由表达</h2>
           <p>
-            <a class="btn btn-primary my-2" href="/">开始写文章</a>
+            <router-link class="btn btn-primary my-2" to="/create">开始写文章</router-link>
           </p>
         </div>
       </div>
@@ -17,44 +17,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import ColumnList, { ColumnProps } from '@/components/ColumnList.vue'
-const columnData: ColumnProps[] = [
-  {
-    id: 1,
-    title: 'test1专栏',
-    description: '12312132131232132133333333',
-    avatar: 'https://avatars.githubusercontent.com/u/48079487?s=60&v=4'
-  },
-  {
-    id: 2,
-    title: 'test2专栏',
-    description: '12312132131232132133333333'
-  },
-  {
-    id: 2,
-    title: 'test2专栏',
-    description: '12312132131232132133333333',
-    avatar: 'https://avatars.githubusercontent.com/u/48079487?s=60&v=4'
-  },
-  {
-    id: 2,
-    title: 'test2专栏',
-    description: '12312132131232132133333333'
-  },
-  {
-    id: 2,
-    title: 'test2专栏',
-    description: '12312132131232132133333333',
-    avatar: 'https://avatars.githubusercontent.com/u/48079487?s=60&v=4'
-  }
-]
+import { defineComponent, computed } from 'vue'
+import { useStore } from 'vuex'
+import { GlobalDataProps } from '@/store'
+import ColumnList from '@/components/ColumnList.vue'
 export default defineComponent({
   name: 'Home',
   components: { ColumnList },
   setup () {
+    const store = useStore<GlobalDataProps>()
+    const list = computed(() => store.state.columns)
     return {
-      list: columnData
+      list
     }
   }
 })
