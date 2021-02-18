@@ -6,15 +6,27 @@
         <router-link class="btn btn-outline-light my-2" to="/login">登录</router-link>
       </li>
       <li class="list-inline-item">
-        <router-link class="btn btn-outline-light my-2" to="/login">注册</router-link>
+        <router-link class="btn btn-outline-light my-2" to="/signup">注册</router-link>
       </li>
     </ul>
     <ul class="list-inline mb-0" v-else>
       <li class="list-inline-item">
-        <Dropdown :title="`你好 ${user.name}`">
-          <DropdownItem><a class="dropdown-item" href="/">新建文章</a></DropdownItem>
-          <DropdownItem disabled><a class="dropdown-item" href="/">编辑资料</a></DropdownItem>
-          <DropdownItem><a class="dropdown-item" href="/">退出登录</a></DropdownItem>
+        <Dropdown :title="`你好 ${user.nickName}`">
+          <DropdownItem>
+            <router-link class="dropdown-item" to="/create">新建文章</router-link>
+          </DropdownItem>
+          <DropdownItem disabled>
+            <router-link class="dropdown-item" to="/">编辑资料</router-link>
+          </DropdownItem>
+          <DropdownItem>
+            <router-link
+              class="dropdown-item"
+              to="/"
+              @click.prevent="handleLogout"
+            >
+              退出登录
+            </router-link>
+          </DropdownItem>
         </Dropdown>
       </li>
     </ul>
@@ -23,13 +35,11 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+import { GlobalDataProps, UserProps } from '@/store/types'
 import Dropdown from '@/components/Dropdown.vue'
 import DropdownItem from '@/components/DropdownItem.vue'
-export interface UserProps {
-  isLogin: boolean;
-  name?: string;
-  id?: number;
-}
 export default defineComponent({
   name: 'GlobalHeader',
   components: { Dropdown, DropdownItem },
@@ -37,6 +47,17 @@ export default defineComponent({
     user: {
       type: Object as PropType<UserProps>,
       required: true
+    }
+  },
+  setup () {
+    const store = useStore<GlobalDataProps>()
+    const router = useRouter()
+    const handleLogout = () => {
+      store.commit('logout')
+      router.push({ name: 'home' })
+    }
+    return {
+      handleLogout
     }
   }
 })

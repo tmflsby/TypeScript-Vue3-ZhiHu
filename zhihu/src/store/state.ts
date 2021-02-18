@@ -1,11 +1,13 @@
 const state = {
   loading: false,
+  error: {
+    status: false
+  },
+  token: localStorage.getItem('token') || '',
   columns: [],
   posts: [],
   user: {
-    isLogin: true,
-    name: 'ShuaiYang',
-    columnId: 1
+    isLogin: false
   }
 }
 

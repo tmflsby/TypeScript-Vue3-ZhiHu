@@ -34,7 +34,7 @@ import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { GlobalDataProps, PostProps } from '@/store/types'
 import ValidateForm from '@/components/ValidateForm.vue'
-import ValidateInput, { RulesProp } from '@/components/ValidateInput.vue'
+import ValidateInput, { RulesProps } from '@/components/ValidateInput.vue'
 export default defineComponent({
   name: 'CreatePost',
   components: { ValidateForm, ValidateInput },
@@ -42,26 +42,26 @@ export default defineComponent({
     const router = useRouter()
     const store = useStore<GlobalDataProps>()
     const titleVal = ref('')
-    const titleRules: RulesProp = [
+    const titleRules: RulesProps = [
       { type: 'required', message: '文章标题不能为空' }
     ]
     const contentVal = ref('')
-    const contentRules: RulesProp = [
+    const contentRules: RulesProps = [
       { type: 'required', message: '文章详情不能为空' }
     ]
     const onFormSubmit = (result: boolean) => {
       if (result) {
-        const { columnId } = store.state.user
-        if (columnId) {
+        const { column } = store.state.user
+        if (column) {
           const newPost: PostProps = {
             _id: String(new Date().getTime()),
             title: titleVal.value,
             content: contentVal.value,
-            column: String(columnId),
+            column,
             createdAt: new Date().toLocaleString()
           }
           store.commit('createPost', newPost)
-          router.push({ name: 'column', params: { id: columnId } })
+          router.push({ name: 'column', params: { id: column } })
         }
       }
     }

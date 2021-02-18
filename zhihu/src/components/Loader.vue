@@ -1,5 +1,5 @@
 <template>
-  <teleport to="#back">
+  <teleport to="#loader">
     <div
       class="d-flex justify-content-center align-items-center h-100 w-100 loading-container"
       :style="{backgroundColor: background || ''}"
@@ -15,7 +15,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onUnmounted } from 'vue'
+import { defineComponent } from 'vue'
+import useDomCreate from '@/hooks/useDOMCreate'
 export default defineComponent({
   name: 'Loader',
   props: {
@@ -27,12 +28,7 @@ export default defineComponent({
     }
   },
   setup () {
-    const node = document.createElement('div')
-    node.id = 'back'
-    document.body.appendChild(node)
-    onUnmounted(() => {
-      document.body.removeChild(node)
-    })
+    useDomCreate('loader')
   }
 })
 </script>
