@@ -1,14 +1,11 @@
 import { GetterTree } from 'vuex'
 
 const getters: GetterTree<any, any> = {
-  biggerColumnLen (state) {
-    return state.columns.filter((c: { id: number }) => c.id > 2).length
+  getColumnById: state => (id: string) => {
+    return state.columns.find((c: { _id: string }) => c._id === id)
   },
-  getColumnById: state => (id: number) => {
-    return state.columns.find((c: { id: number }) => c.id === id)
-  },
-  getPostsByCid: state => (cid: number) => {
-    return state.posts.filter((post: { columnId: number }) => post.columnId === cid)
+  getPostsByCid: state => (cid: string) => {
+    return state.posts.filter((post: { column: string }) => post.column === cid)
   }
 }
 

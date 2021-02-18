@@ -1,8 +1,7 @@
-import { testData, testPosts } from '@/testData'
-
 const state = {
-  columns: testData,
-  posts: testPosts,
+  loading: false,
+  columns: [],
+  posts: [],
   user: {
     isLogin: true,
     name: 'ShuaiYang',
