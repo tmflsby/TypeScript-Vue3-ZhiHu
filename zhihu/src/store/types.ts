@@ -45,6 +45,7 @@ export interface PostProps {
   createdAt?: string;
   column: string;
   author?: string | UserProps;
+  isHTML?: boolean;
 }
 
 export interface GlobalErrorProps {
@@ -52,9 +53,26 @@ export interface GlobalErrorProps {
   message?: string;
 }
 
+export interface ListProps<P> {
+  [id: string]: P;
+}
+
+export interface LoadedPostProps {
+  columnId?: string;
+  currentPage?: number;
+  total?: number;
+}
+
 export interface GlobalDataProps {
-  columns: ColumnProps[];
-  posts: PostProps[];
+  columns: {
+    data: ListProps<ColumnProps>;
+    currentPage: number;
+    total: number;
+  };
+  posts: {
+    data: ListProps<PostProps>;
+    loadedColumns: ListProps<LoadedPostProps>;
+  };
   user: UserProps;
   loading: boolean;
   token: string;

@@ -62,6 +62,8 @@ export default defineComponent({
     ValidateForm
   },
   setup () {
+    const router = useRouter()
+    const store = useStore()
     const formData = reactive({
       email: '',
       nickName: '',
@@ -86,10 +88,6 @@ export default defineComponent({
         message: '两次密码不相同'
       }
     ]
-
-    const router = useRouter()
-    const store = useStore()
-
     const onFormSubmit = (result: boolean) => {
       if (result) {
         const payload = {

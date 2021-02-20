@@ -28,9 +28,7 @@ export default defineComponent({
         funcArr.push(func)
       }
     }
-
     emitter.on('form-item-created', callback)
-
     onUnmounted(() => {
       emitter.off('form-item-created', callback)
       funcArr = []

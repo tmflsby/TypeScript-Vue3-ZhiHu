@@ -1,11 +1,12 @@
 <template>
   <div class="create-post-page">
-    <h4>新建文章</h4>
+    <h4>{{isEditMode ? '编辑文章' : '新建文章'}}</h4>
     <Uploader
       class="d-flex align-items-center justify-content-center bg-light text-secondary w-100 my-4"
       action="/upload"
       :beforeUpload="uploadCheck"
       @file-uploaded-success="onFileUploadedSuccess"
+      :uploaded="uploadedData"
     >
       <h2>点击上传头图</h2>
       <template #loading>
@@ -44,16 +45,16 @@
         />
       </div>
       <template #submit>
-        <button class="btn btn-primary btn-lg">发表文章</button>
+        <button class="btn btn-primary btn-lg">{{isEditMode ? '更新文章' : '发表文章'}}</button>
       </template>
     </ValidateForm>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { GlobalDataProps, PostProps, ResponseType, ImageProps } from '@/store/types'
 import { beforeUploadCheck } from '@/utils/helper'
 import ValidateForm from '@/components/ValidateForm.vue'
@@ -65,6 +66,7 @@ export default defineComponent({
   components: { ValidateForm, ValidateInput, Uploader },
   setup () {
     const router = useRouter()
+    const route = useRoute()
     const store = useStore<GlobalDataProps>()
     const titleVal = ref('')
     const titleRules: RulesProps = [
@@ -74,7 +76,23 @@ export default defineComponent({
     const contentRules: RulesProps = [
       { type: 'required', message: '文章详情不能为空' }
     ]
+    const queryId = route.query.id
+    const isEditMode = !!queryId
+    const uploadedData = ref()
     let imageId = ''
+    onMounted(() => {
+      if (isEditMode) {
+        store.dispatch('fetchPost', queryId).then((rawData: ResponseType<PostProps>) => {
+          const currentPost = rawData.data
+          const { image, title, content } = currentPost
+          if (image) {
+            uploadedData.value = { data: image }
+          }
+          titleVal.value = title
+          contentVal.value = content || ''
+        })
+      }
+    })
     const onFormSubmit = (result: boolean) => {
       if (result) {
         const { column, _id } = store.state.user
@@ -88,7 +106,12 @@ export default defineComponent({
           if (imageId) {
             newPost.image = imageId
           }
-          store.dispatch('createPost', newPost).then(() => {
+          const actionName = isEditMode ? 'updatePost' : 'createPost'
+          const sendData = isEditMode ? {
+            id: queryId,
+            payload: newPost
+          } : newPost
+          store.dispatch(actionName, sendData).then(() => {
             createMessage('发表成功，2秒后跳转到文章', 'success', 2000)
             setTimeout(() => {
               router.push({ name: 'column', params: { id: column } })
@@ -123,7 +146,9 @@ export default defineComponent({
       contentRules,
       onFormSubmit,
       onFileUploadedSuccess,
-      uploadCheck
+      uploadCheck,
+      uploadedData,
+      isEditMode
     }
   }
 })

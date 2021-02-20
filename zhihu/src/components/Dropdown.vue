@@ -1,12 +1,12 @@
 <template>
   <div class="dropdown" ref="dropdownRef">
-    <a
+    <router-link
       class="btn btn-outline-light my-2 dropdown-toggle"
-      href="/"
+      to="/"
       @click.prevent="toggleOpen"
     >
       {{title}}
-    </a>
+    </router-link>
     <ul class="dropdown-menu" :style="{display: 'block'}" v-if="isOpen">
       <slot></slot>
     </ul>
@@ -31,7 +31,6 @@ export default defineComponent({
     }
     const dropdownRef = ref<null | HTMLElement>(null)
     const isClickOutside = useClickOutside(dropdownRef)
-
     watch(isClickOutside, () => {
       if (isOpen.value && isClickOutside.value) {
         isOpen.value = false
