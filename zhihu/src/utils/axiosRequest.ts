@@ -1,6 +1,9 @@
 import axios from 'axios'
 import store from '@/store'
 
+// 接口校验码
+const icode = 'E219C6BE1D9368AF'
+
 const axiosRequest = axios.create({
   baseURL: '/api',
   timeout: 5000
@@ -10,6 +13,19 @@ const axiosRequest = axios.create({
 axiosRequest.interceptors.request.use(config => {
   store.commit('setLoading', true)
   store.commit('setError', { status: false, message: '' })
+  // 统一接口登录管理
+  config.params = {
+    ...config.params,
+    icode
+  }
+  if (config.data instanceof FormData) {
+    config.data.append('icode', icode)
+  } else {
+    config.data = {
+      ...config.data,
+      icode
+    }
+  }
   return config
 })
 
